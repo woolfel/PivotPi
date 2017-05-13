@@ -5,16 +5,24 @@ import java.util.logging.Logger;
 
 import com.pi4j.io.i2c.I2CDevice;
 
+/**
+ * Subclasses need to use pi4j i2c factory class to get the I2CBus. Once you have
+ * the bus, you can get the device by the address. The address used by the python
+ * driver is 0x40.
+ * 
+ * @author peter
+ *
+ */
 public abstract class BasePCA9685 implements PCA9685 {
 
 	/**
 	 * pi4j I2C device
 	 */
-	private I2CDevice i2cDevice;
+	protected I2CDevice i2cDevice;
 	protected Logger log = null;
 	
-	public BasePCA9685(I2CDevice device) {
-		this.i2cDevice = device;
+	public BasePCA9685() {
+		super();
 	}
 	
 	public void writeRegister(int address, byte value) throws IOException {
