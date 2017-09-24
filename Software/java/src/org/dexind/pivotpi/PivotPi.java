@@ -28,6 +28,7 @@ public class PivotPi extends BasePCA9685 implements ServoController {
 		try {
 			this.bus = I2CFactory.getInstance(1);
 			this.i2cDevice = this.bus.getDevice(PCA9685.PCA9685_ADDRESS);
+			this.setPwmFrequency(60);
 			this.log = Logger.getLogger(PivotPi.class.getName());
 		} catch (UnsupportedBusNumberException e) {
 			e.printStackTrace();
@@ -36,6 +37,30 @@ public class PivotPi extends BasePCA9685 implements ServoController {
 			e.printStackTrace();
 			log.log(Level.SEVERE, "Error instantiating PivotPi", e);
 		}
+	}
+	
+	/**
+	 * Set the PWM frequency to the provided value in Hertz
+	 */
+	public void setPwmFrequency(double hertz) throws IOException {
+		double prescaleVal = 25000000.0d; // 25Mhz
+		prescaleVal = prescaleVal / 4096.0d; // 12bit
+		prescaleVal = prescaleVal / (double)hertz;
+		prescaleVal = prescaleVal - 1.0;
+		
+		System.out.println("Seting PWM Freq to " + hertz + "Hz");
+		int freqVal = (int)Math.floor(prescaleVal + 0.5d);
+		int oldMode = this.i2cDevice.read(MODE1);
+		int newMode = (oldMode & 0x7F) | 0x10;
+		this.write8(MODE1, newMode);
+		this.write8(PRESCALE, freqVal);
+		this.write8(MODE1, oldMode);
+		try {
+			Thread.sleep(1);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		this.write8(MODE1, oldMode | 0x80);
 	}
 	
 	@Override
@@ -117,4 +142,13 @@ public class PivotPi extends BasePCA9685 implements ServoController {
 		this.i2cDevice.write(LED0_OFF_H+4*channel, offh.byteValue());
 	}
 
+	public void write8(int register, int value) throws IOException {
+		Integer intvalue = new Integer(value & 0xFF);
+		this.i2cDevice.write(register, intvalue.byteValue());
+	}
+	
+	public void write16(int register, int value) throws IOException {
+		Integer intvalue = new Integer(value & 0xFFFF);
+		this.i2cDevice.write(register, intvalue.byteValue());
+	}
 }
