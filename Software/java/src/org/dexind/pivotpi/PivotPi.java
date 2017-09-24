@@ -136,19 +136,19 @@ public class PivotPi extends BasePCA9685 implements ServoController {
 		Integer offl = new Integer(off & 0xFF);
 		Integer offh = new Integer(off >> 8);
 		
-		this.i2cDevice.write(LED0_ON_L+4*channel, onl.byteValue());
-		this.i2cDevice.write(LED0_ON_H+4*channel, onh.byteValue());
-		this.i2cDevice.write(LED0_OFF_L+4*channel, offl.byteValue());
-		this.i2cDevice.write(LED0_OFF_H+4*channel, offh.byteValue());
+		this.write8(LED0_ON_L+4*channel, onl.byteValue());
+		this.write8(LED0_ON_H+4*channel, onh.byteValue());
+		this.write8(LED0_OFF_L+4*channel, offl.byteValue());
+		this.write8(LED0_OFF_H+4*channel, offh.byteValue());
 	}
 
 	public void write8(int register, int value) throws IOException {
 		Integer intvalue = new Integer(value & 0xFF);
-		this.i2cDevice.write(register, intvalue.byteValue());
+		this.writeRegister(register, intvalue.byteValue());
 	}
 	
 	public void write16(int register, int value) throws IOException {
 		Integer intvalue = new Integer(value & 0xFFFF);
-		this.i2cDevice.write(register, intvalue.byteValue());
+		this.writeRegister(register, intvalue.byteValue());
 	}
 }
