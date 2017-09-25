@@ -11,16 +11,16 @@ public class SimpleTest {
 				pvpi.angleMicroseconds(i, 1500); // Set the Servo to 1500 angle
 			}
 			try {
-				Thread.sleep(500);
+				Thread.sleep(50);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
-			for (int i=0; i < 8; i++) {
-				pvpi.led(i, (i + 1) * 4); // Increase the LED Power
-				pvpi.angleMicroseconds(i, 550 + (i * 272)); // Change the pivotpi Angle
+			for (int j=0; j < 8; j++) {
+				pvpi.led(j, (j + 1) * 4); // Increase the LED Power
+				pvpi.angleMicroseconds(j, 550 + (j * 270)); // Change the pivotpi Angle
 			}
 			try {
-				Thread.sleep(500);
+				Thread.sleep(50);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}

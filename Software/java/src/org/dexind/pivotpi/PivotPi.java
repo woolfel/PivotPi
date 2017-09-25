@@ -19,7 +19,7 @@ public class PivotPi extends BasePCA9685 implements ServoController {
     // Configure min and max servo pulse lengths
 	public final int servo_min = 150;  // Min pulse length out of 4096
 	public final int servo_max = 600;  // Max pulse length out of 4096
-    private int frequency = 60;
+    private float frequency = 60f;
     
     private I2CBus bus = null;
 		
@@ -28,7 +28,7 @@ public class PivotPi extends BasePCA9685 implements ServoController {
 		try {
 			this.bus = I2CFactory.getInstance(1);
 			this.i2cDevice = this.bus.getDevice(PCA9685.PCA9685_ADDRESS);
-			this.setPwmFrequency(60);
+			this.setPwmFrequency(frequency);
 			this.log = Logger.getLogger(PivotPi.class.getName());
 		} catch (UnsupportedBusNumberException e) {
 			e.printStackTrace();
@@ -42,14 +42,14 @@ public class PivotPi extends BasePCA9685 implements ServoController {
 	/**
 	 * Set the PWM frequency to the provided value in Hertz
 	 */
-	public void setPwmFrequency(double hertz) throws IOException {
-		double prescaleVal = 25000000.0d; // 25Mhz
-		prescaleVal = prescaleVal / 4096.0d; // 12bit
-		prescaleVal = prescaleVal / (double)hertz;
-		prescaleVal = prescaleVal - 1.0;
+	public void setPwmFrequency(float hertz) throws IOException {
+		float prescaleVal = 25000000.0f; // 25Mhz
+		prescaleVal = prescaleVal / 4096.0f; // 12bit
+		prescaleVal = prescaleVal / hertz;
+		prescaleVal = prescaleVal - 1.0f;
 		
 		System.out.println("Seting PWM Freq to " + hertz + "Hz");
-		int freqVal = (int)Math.floor(prescaleVal + 0.5d);
+		int freqVal = (int)Math.floor(prescaleVal + 0.5f);
 		int oldMode = this.i2cDevice.read(MODE1);
 		int newMode = (oldMode & 0x7F) | 0x10;
 		this.write8(MODE1, newMode);
@@ -83,7 +83,8 @@ public class PivotPi extends BasePCA9685 implements ServoController {
 				if (time <= 0) {
 					this.setPWM(channel, 4096, 4095);
 				} else {
-					int pwmToSend = 4095 - ((4096 / (1000000 / frequency)) * time);
+					float f = (1000000.0f / frequency) * time;
+					int pwmToSend = 4095 - (int)f;
 					if (pwmToSend < 0) {
 						pwmToSend = 0;
 					}
@@ -99,7 +100,7 @@ public class PivotPi extends BasePCA9685 implements ServoController {
 	}
 
 	@Override
-	public void led(int channel, double percent) {
+	public void led(int channel, float percent) {
 		if (channel >= 0 && channel <= 7) {
 			try {
 				if (percent >= 100) {
@@ -108,8 +109,8 @@ public class PivotPi extends BasePCA9685 implements ServoController {
 					if (percent < 0) {
 						percent = 0;
 					}
-					double pwmToSend = percent * 40.95d;
-					this.setPWM(channel +8, 0, (int)pwmToSend);
+					float pwmToSend = percent * 40.95f;
+					this.setPWM(channel + 8, 0, (int)pwmToSend);
 				}
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -137,10 +138,10 @@ public class PivotPi extends BasePCA9685 implements ServoController {
 		Integer offl = new Integer(off & 0xFF);
 		Integer offh = new Integer(off >> 8);
 		
-		this.write8(LED0_ON_L+4*channel, onl.byteValue());
-		this.write8(LED0_ON_H+4*channel, onh.byteValue());
-		this.write8(LED0_OFF_L+4*channel, offl.byteValue());
-		this.write8(LED0_OFF_H+4*channel, offh.byteValue());
+		this.write8(LED0_ON_L + 4 * channel, onl.byteValue());
+		this.write8(LED0_ON_H + 4 * channel, onh.byteValue());
+		this.write8(LED0_OFF_L + 4 * channel, offl.byteValue());
+		this.write8(LED0_OFF_H + 4 * channel, offh.byteValue());
 	}
 
 	public void write8(int register, int value) throws IOException {

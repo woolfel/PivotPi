@@ -22,5 +22,5 @@ public interface ServoController {
 	int translate(int val, int leftMin, int leftMax, int rightMin, int rightMax);
 	void angle(int channel, int angle);
 	void angleMicroseconds(int channel, int time);
-	void led(int channel, double percent);
+	void led(int channel, float percent);
 }
