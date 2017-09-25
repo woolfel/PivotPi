@@ -71,6 +71,7 @@ public class PivotPi extends BasePCA9685 implements ServoController {
 				this.setPWM(channel, 0, pwmToSend);
 			} catch (IOException e) {
 				System.err.println(e.getMessage());
+				e.printStackTrace();
 			}
 		}
 	}

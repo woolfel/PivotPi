@@ -4,6 +4,7 @@ public class SimpleTest {
 
 	public static void main(String[] args) {
 		PivotPi pvpi = new PivotPi();
+		System.out.print("Instantiated PivotPi: Start test");
 		while (true) {
 			for (int i=0; i < 8; i++) {
 				pvpi.led(i, 0); // Set the LED to 0 Power
