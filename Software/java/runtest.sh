@@ -11,6 +11,11 @@ do
   CLASSPATH=${CLASSPATH}:${i}
 done
 
+for i in `ls -1 $HOME_PATH/lib/*.jar`
+do
+  CLASSPATH=${CLASSPATH}:${i}
+done
+
 if [ -n "$JAVA_HOME" ]; then
     JAVA="$JAVA_HOME/java"
 else
