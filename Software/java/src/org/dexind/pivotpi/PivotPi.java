@@ -83,7 +83,7 @@ public class PivotPi extends BasePCA9685 implements ServoController {
 				if (time <= 0) {
 					this.setPWM(channel, 4096, 4095);
 				} else {
-					float f = (1000000.0f / frequency) * time;
+					float f = (4096.0f / (1000000.0f / frequency)) * time;
 					int pwmToSend = 4095 - (int)f;
 					if (pwmToSend < 0) {
 						pwmToSend = 0;
