@@ -9,6 +9,13 @@ import java.util.logging.Logger;
 
 import com.pi4j.io.i2c.I2CBus;
 
+/**
+ * PivotPi implements three additional methods, which aren't in the base class.
+ * The logger uses default java logging.
+ * 
+ * @author peter lin
+ *
+ */
 public class PivotPi extends BasePCA9685 implements ServoController {
 
 	public final int addr_00 = 0x40;
@@ -40,7 +47,8 @@ public class PivotPi extends BasePCA9685 implements ServoController {
 	}
 	
 	/**
-	 * Set the PWM frequency to the provided value in Hertz
+	 * Set the PWM frequency to the provided value in Hertz. The method
+	 * is similar to the python driver function.
 	 */
 	public void setPwmFrequency(float hertz) throws IOException {
 		float prescaleVal = 25000000.0f; // 25Mhz
@@ -99,6 +107,10 @@ public class PivotPi extends BasePCA9685 implements ServoController {
 		}
 	}
 
+	/**
+	 * Set the LED on the PivotPi. There are 8 LED starting with
+	 * index 0 to 7.
+	 */
 	@Override
 	public void led(int channel, float percent) {
 		if (channel >= 0 && channel <= 7) {
@@ -131,6 +143,16 @@ public class PivotPi extends BasePCA9685 implements ServoController {
 	    return (int)(rightMin + (valueScaled * rightSpan));
 	}
 	
+	/**
+	 * setPWM is the main method for issuing commands to the PCA 9685. The
+	 * implementation is similar to the Python driver. The main difference
+	 * is we use Integer class and call byteValue().
+	 * 
+	 * @param channel
+	 * @param on
+	 * @param off
+	 * @throws IOException
+	 */
 	public void setPWM(int channel, int on, int off) throws IOException {
 
 		Integer onl = new Integer(on & 0xFF);

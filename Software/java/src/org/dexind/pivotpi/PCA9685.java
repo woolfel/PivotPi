@@ -1,5 +1,12 @@
 package org.dexind.pivotpi;
 
+/**
+ * The interface defines the static constants needed for PCA9685. The constants
+ * are the same as the Python drivers.
+ * 
+ * @author peter lin
+ *
+ */
 public interface PCA9685 {
 
 	/**********************/

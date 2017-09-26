@@ -8,9 +8,13 @@ import com.pi4j.io.i2c.I2CDevice;
 /**
  * Subclasses need to use pi4j i2c factory class to get the I2CBus. Once you have
  * the bus, you can get the device by the address. The address used by the python
- * driver is 0x40.
+ * driver is 0x40.<p/>
  * 
- * @author peter
+ * BasePCA9685 implements the write and read methods. Subclasses need to call
+ * the write/read methods. You can use the I2CDevice directly, but it's better
+ * to use the base methods.
+ * 
+ * @author peter lin
  *
  */
 public abstract class BasePCA9685 implements PCA9685 {
