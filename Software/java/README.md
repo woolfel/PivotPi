@@ -8,8 +8,11 @@ PivotPi is a Servo Controller for the Raspberry Pi!
 ## Getting Started
 
 To test the driver, connect a small servo to PivotPi.
+
 Run the python example to make sure the drivers are loaded
+
 Change the permission of runtest.sh with "sudo chmod 755 runtest.sh"
+
 Run the test with "./runtest.sh"
 
 ## License
